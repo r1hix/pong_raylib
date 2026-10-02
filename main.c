@@ -31,6 +31,8 @@ typedef struct Ball {
 
 
 // === Constants ===
+int winner = 0;
+
 Color ballColor = BLUE;
 Color paddleColor = BLACK;
 
@@ -52,9 +54,11 @@ void UpdatePaddle(Paddle *paddle) {
     // - Input -
     if (IsKeyDown(paddle->controls.key_Up)) {
         paddle->yPos -= paddleSpeed;
+        paddle->body.y -= paddleSpeed;
     }
     if (IsKeyDown(paddle->controls.key_Down)) {
         paddle->yPos += paddleSpeed;
+        paddle->body.y += paddleSpeed;
     }
 
     // - Wall Constraints - 
@@ -80,6 +84,11 @@ void UpdateBall(Ball *ball, Paddle *p1, Paddle *p2) {
         ball->position.y = windowHeight - ball->radius/2;
         ball->velocity.y = -ball->velocity.y;
     }
+    // Game End Condition
+    if (ball->position.x < 0)
+        winner = 2;
+    else if (ball->position.x > windowWidth)
+        winner = 1;
 
     // Paddle Collision
     if (CheckCollisionCircleRec(ball->position, ball->radius, p1->body)) {
@@ -154,6 +163,11 @@ int main(void)  {
         DrawCircle(ball.position.x, ball.position.y, ball.radius, ball.color);
         DrawRectangle(paddle1.xPos, paddle1.yPos, paddle1.width, paddle1.height, paddle1.color);
         DrawRectangle(paddle2.xPos, paddle2.yPos, paddle2.width, paddle2.height, paddle2.color);
+        if (winner == 1)
+            DrawText("Winner: 1", windowWidth/2, windowHeight/2, 30, BLACK);
+        else if (winner == 2)
+            DrawText("Winner: 2", windowWidth/2, windowHeight/2, 30, BLACK);
+
         EndDrawing();
     }
     CloseWindow();
