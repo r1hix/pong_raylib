@@ -84,9 +84,11 @@ void UpdateBall(Ball *ball, Paddle *p1, Paddle *p2) {
     // Paddle Collision
     if (CheckCollisionCircleRec(ball->position, ball->radius, p1->body)) {
         DrawText("COLLISION BW P1 AND BALL", 0, 0, 30, RED);
+        ball->velocity.x = -ball->velocity.x;
     }
     if (CheckCollisionCircleRec(ball->position, ball->radius, p2->body)) {
-        DrawText("COLLISION BW P2 AND BALL", 0, 0, 30, RED);
+        DrawText("COLLISION BW P2 AND BALL", windowWidth - MeasureText("COLLISION BW P2 AND BALL", 30), 0, 30, RED);
+        ball->velocity.x = -ball->velocity.x;
     }
 }
 
