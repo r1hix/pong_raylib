@@ -75,6 +75,12 @@ void UpdateBall(Ball *ball, Paddle *p1, Paddle *p2) {
     ball->position.x += ball->velocity.x;
     ball->position.y += ball->velocity.y;
 
+    // Speed Clamping – Fix
+    if (ball->velocity.x > ballSpeed)
+        ball->velocity.x = ballSpeed;
+    if (ball->velocity.y > ballSpeed)
+        ball->velocity.y = ballSpeed;
+
     // Wall Collison
     if (ball->position.y - ball->radius/2 < 0) {
         ball->position.y = 0 + ball->radius/2;
@@ -147,7 +153,7 @@ int main(void)  {
     Ball ball = {
         .position = {windowWidth/2 , windowHeight/2},
         .radius = ballInitialRadius,
-        .velocity = {-ballSpeed, 0},
+        .velocity = {-ballSpeed, GetRandomValue(-20, 20)},
         .color = BLUE
     };
 
